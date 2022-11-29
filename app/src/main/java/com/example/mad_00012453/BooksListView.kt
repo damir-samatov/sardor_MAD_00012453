@@ -1,4 +1,4 @@
-package com.example.mad_00012453.library
+package com.example.mad_00012453
 
 import android.content.Intent
 import androidx.compose.foundation.background
@@ -13,24 +13,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mad_00012453.R
+import androidx.navigation.NavController
 import com.example.mad_00012453.models.Book
-import com.example.mad_00012453.newBook.NewBookAct
 
 @Composable
-fun BooksList(
+fun BooksListView(
     onBookClick: (String) -> Unit = {},
-    viewModel: LibraryModel = LibraryModel()
+    navController: NavController
 ) {
+    val books = DB.getAllBooks()
 
-    val context = LocalContext.current
     Box(modifier = Modifier.fillMaxSize()) {
 
         LazyColumn(
@@ -41,7 +39,7 @@ fun BooksList(
                 )
                 .padding(0.dp, 0.dp, 0.dp, 50.dp),
         ) {
-            items(items = viewModel.getBooksList(), itemContent = { item ->
+            items(items = books, itemContent = { item ->
                 BookItem(book = item, onBookClick)
             })
         }
@@ -50,11 +48,13 @@ fun BooksList(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(0.dp, 0.dp, 0.dp, 70.dp),
-            onClick = { context.startActivity(Intent(context, NewBookAct::class.java)) }) {
+            onClick = { navController.navigate("newBook") })
+        {
             Text(
                 stringResource(id = R.string.new_book_label),
                 modifier = Modifier.padding(15.dp, 5.dp),
-            color = colorResource(id = R.color.new_book_text_color))
+                color = colorResource(id = R.color.new_book_text_color)
+            )
         }
     }
 

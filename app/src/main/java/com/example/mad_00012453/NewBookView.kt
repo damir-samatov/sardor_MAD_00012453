@@ -1,6 +1,5 @@
-package com.example.mad_00012453.newBook
+package com.example.mad_00012453
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -13,15 +12,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.mad_00012453.DB
 import com.example.mad_00012453.R
 
 @Composable
-fun NewBookView(viewModel: NewBookModel = NewBookModel()) {
-    val context = LocalContext.current
+fun NewBookView(navController: NavController) {
     val title = remember { mutableStateOf("") }
-
+    val author = remember { mutableStateOf("") }
+    val roles = remember { mutableStateOf("") }
+    val abstract = remember { mutableStateOf("") }
+    val price = remember { mutableStateOf("") }
+    val isValidated = remember { mutableStateOf(true) }
 
     Column(
         modifier = Modifier
@@ -29,19 +32,42 @@ fun NewBookView(viewModel: NewBookModel = NewBookModel()) {
             .background(color = Color.White)
             .padding(16.dp)
     ) {
-        TitleInput(title = title.value, onTitleChange = { title.value = it })
+        TitleInput(title.value, { title.value = it })
+
         Spacer(Modifier.height(16.dp))
-        AuthorInput()
+
+        AuthorInput(author.value, { author.value = it })
+
         Spacer(Modifier.height(16.dp))
-        MainRolesInput()
+
+        MainRolesInput(roles.value, { roles.value = it })
+
         Spacer(Modifier.height(16.dp))
-        PriceInput()
+
+        AbstractInput(abstract.value, { abstract.value = it })
+
         Spacer(Modifier.height(16.dp))
-        val validationMsg = stringResource(id = R.string.add_new_validation_msg)
+
+        PriceInput(price.value, { price.value = it })
+
+        Spacer(Modifier.height(16.dp))
+
+        if(!isValidated.value) {
+            Text(text = "Please fill out all the fields")
+        }
+
         AddNewButton {
-//            if (isInputValid(title.value)) //todo
-//            viewModel.saveBook(null)
-            Toast.makeText(context, "Clicked", Toast.LENGTH_SHORT).show()
+            val isAdded = DB.addNewBook(
+                title.value,
+                author.value,
+                price.value,
+                roles.value,
+                abstract.value
+            )
+            isValidated.value = isAdded
+            if(isAdded){
+                navController.navigate("booksList")
+            }
         }
     }
 }
@@ -64,17 +90,15 @@ private fun TitleInput(title: String, onTitleChange: (String) -> Unit) {
 
 
 @Composable
-private fun AuthorInput() {
-    var text by remember { mutableStateOf(TextFieldValue("")) }
-
+private fun AuthorInput(author: String, onAuthorChange: (String) -> Unit) {
     TextField(
         modifier = Modifier
             .fillMaxWidth()
-            .height(120.dp)
+            .height(60.dp)
             .background(color = Color.LightGray),
-        value = text,
+        value = author,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-        onValueChange = { text = it },
+        onValueChange = { onAuthorChange(it) },
         label = {
             Text(stringResource(id = R.string.author_input))
         }
@@ -82,17 +106,15 @@ private fun AuthorInput() {
 }
 
 @Composable
-private fun MainRolesInput() {
-    var text by remember { mutableStateOf(TextFieldValue("")) }
-
+private fun MainRolesInput(roles: String, onRoleChange: (String) -> Unit) {
     TextField(
         modifier = Modifier
             .fillMaxWidth()
-            .height(120.dp)
+            .height(60.dp)
             .background(color = Color.LightGray),
-        value = text,
+        value = roles,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-        onValueChange = { text = it },
+        onValueChange = { onRoleChange(it) },
         label = {
             Text(stringResource(id = R.string.main_roles_input))
         }
@@ -100,16 +122,30 @@ private fun MainRolesInput() {
 }
 
 @Composable
-private fun PriceInput() {
-    var text by remember { mutableStateOf(TextFieldValue("")) }
+private fun AbstractInput(abstract: String, onAbstractChange: (String) -> Unit) {
+    TextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(120.dp)
+            .background(color = Color.LightGray),
+        value = abstract,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+        onValueChange = { onAbstractChange(it) },
+        label = {
+            Text(stringResource(id = R.string.abstract_input_text))
+        }
+    )
+}
 
+@Composable
+private fun PriceInput(price: String, onPriceChange: (String) -> Unit) {
     TextField(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = Color.LightGray),
-        value = text,
+        value = price,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        onValueChange = { text = it },
+        onValueChange = { onPriceChange(it) },
         label = {
             Text(stringResource(id = R.string.price_text))
         }
@@ -118,7 +154,6 @@ private fun PriceInput() {
 
 @Composable
 private fun AddNewButton(onClick: () -> Unit) {
-
     Button(
         onClick = {
             onClick()
@@ -133,9 +168,3 @@ private fun AddNewButton(onClick: () -> Unit) {
         )
     }
 }
-
-//    private fun isInputValid(): Boolean {
-//todo implement
-//        if ()
-//        return true
-//    }

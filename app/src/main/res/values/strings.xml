@@ -3,7 +3,6 @@
     <string name="movies_tab_title">Books</string>
     <string name="settings_tab_title">Read</string>
 
-    <string name="price_label">Price: \%1s 000</string>
     <string name="new_book_text">Save</string>
     <string name="title_input">Title</string>
     <string name="author_input">Author</string>
@@ -14,6 +13,8 @@
     <string name="add_new_saved_successfully_msg">Added</string>
     <string name="add_new_failed_to_save_msg">Failed</string>
     <string name="new_book_label">New Book</string>
+    <string name="abstract_input_text">Abstract</string>
+    <string name="delete_book_text">Delete</string>
 
     <string name="nav_books">Books</string>
     <string name="nav_read">Read</string>

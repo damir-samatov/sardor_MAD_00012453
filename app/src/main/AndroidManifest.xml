@@ -27,8 +27,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".newBook.NewBookAct"
-                    android:windowSoftInputMode="adjustResize"></activity>
     </application>
 
 </manifest>
