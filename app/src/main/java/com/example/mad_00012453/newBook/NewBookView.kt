@@ -1,4 +1,4 @@
-package com.example.mad_00012453
+package com.example.mad_00012453.newBook
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -15,14 +15,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.example.mad_00012453.addNew.AddNewViewModel
 import com.example.mad_00012453.R
 
 @Composable
-fun AddNewView(viewModel: AddNewViewModel = AddNewViewModel()) {
+fun NewBookView(viewModel: NewBookModel = NewBookModel()) {
     val context = LocalContext.current
+    val title = remember { mutableStateOf("") }
 
-    val name = remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -30,17 +29,18 @@ fun AddNewView(viewModel: AddNewViewModel = AddNewViewModel()) {
             .background(color = Color.White)
             .padding(16.dp)
     ) {
-        NameInput(name = name.value, onNameChange = { name.value = it })
+        TitleInput(title = title.value, onTitleChange = { title.value = it })
         Spacer(Modifier.height(16.dp))
-        DescriptionInput()
+        AuthorInput()
         Spacer(Modifier.height(16.dp))
-        ActorsInput()
+        MainRolesInput()
         Spacer(Modifier.height(16.dp))
-        BudgetInput()
+        PriceInput()
         Spacer(Modifier.height(16.dp))
+        val validationMsg = stringResource(id = R.string.add_new_validation_msg)
         AddNewButton {
-//            if (isInputValid()) //todo
-//            viewModel.saveNewMovieToRemoteDb(null)
+//            if (isInputValid(title.value)) //todo
+//            viewModel.saveBook(null)
             Toast.makeText(context, "Clicked", Toast.LENGTH_SHORT).show()
         }
     }
@@ -48,23 +48,23 @@ fun AddNewView(viewModel: AddNewViewModel = AddNewViewModel()) {
 
 
 @Composable
-private fun NameInput(name: String, onNameChange: (String) -> Unit) {
+private fun TitleInput(title: String, onTitleChange: (String) -> Unit) {
     TextField(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = Color.LightGray),
-        value = name,
+        value = title,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-        onValueChange = { onNameChange(it) },
+        onValueChange = { onTitleChange(it) },
         label = {
-            Text(stringResource(id = R.string.add_new_name_input_hint))
+            Text(stringResource(id = R.string.title_input))
         }
     )
 }
 
 
 @Composable
-private fun DescriptionInput() {
+private fun AuthorInput() {
     var text by remember { mutableStateOf(TextFieldValue("")) }
 
     TextField(
@@ -76,13 +76,13 @@ private fun DescriptionInput() {
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
         onValueChange = { text = it },
         label = {
-            Text(stringResource(id = R.string.add_new_description_input_hint))
+            Text(stringResource(id = R.string.author_input))
         }
     )
 }
 
 @Composable
-private fun ActorsInput() {
+private fun MainRolesInput() {
     var text by remember { mutableStateOf(TextFieldValue("")) }
 
     TextField(
@@ -94,13 +94,13 @@ private fun ActorsInput() {
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
         onValueChange = { text = it },
         label = {
-            Text(stringResource(id = R.string.add_new_actors_input_hint))
+            Text(stringResource(id = R.string.main_roles_input))
         }
     )
 }
 
 @Composable
-private fun BudgetInput() {
+private fun PriceInput() {
     var text by remember { mutableStateOf(TextFieldValue("")) }
 
     TextField(
@@ -111,7 +111,7 @@ private fun BudgetInput() {
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         onValueChange = { text = it },
         label = {
-            Text(stringResource(id = R.string.add_new_name_budget_hint))
+            Text(stringResource(id = R.string.price_text))
         }
     )
 }
@@ -129,7 +129,7 @@ private fun AddNewButton(onClick: () -> Unit) {
             .padding(vertical = 16.dp)
     ) {
         Text(
-            text = stringResource(id = R.string.add_new_save_button_text)
+            text = stringResource(id = R.string.new_book_text)
         )
     }
 }

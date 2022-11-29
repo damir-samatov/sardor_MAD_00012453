@@ -1,10 +1,8 @@
 package com.example.mad_00012453
 
 import android.os.Bundle
-import android.provider.ContactsContract
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
@@ -12,23 +10,20 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import com.example.mad_00012453.list.DetailedView
+import com.example.mad_00012453.aboutBook.AboutBookView
+import com.example.mad_00012453.library.BooksList
 import com.example.mad_00012453.ui.theme.MAD_00012453Theme
 
 class MainActivity : ComponentActivity() {
@@ -41,20 +36,17 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-//                    Navigation()
                     val navController = rememberNavController()
                     Scaffold(bottomBar = {
                         BottomNavigationBar(
                             items = listOf(
                                 BottomNavItem(
-                                    name = stringResource(id = R.string.navigation_movies_title),
-                                    route = "moviesList",
-                                    icon = Icons.Default.List
+                                    name = stringResource(id = R.string.nav_books),
+                                    route = "catalog"
                                 ),
                                 BottomNavItem(
-                                    name = stringResource(id = R.string.navigation_settings_title),
-                                    route = "settings",
-                                    icon = Icons.Default.Settings
+                                    name = stringResource(id = R.string.nav_read),
+                                    route = "aboutBookView"
                                 )
 
                             ),
@@ -74,23 +66,23 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Navigation(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = "moviesList") {
-        composable("moviesList") {
-            MoviesList(
-                onMovieClick = { movieId ->
-                    navController.navigate("detailedView/$movieId")
+    NavHost(navController = navController, startDestination = "catalog") {
+        composable("catalog") {
+            BooksList(
+                onBookClick = { bookId ->
+                    navController.navigate("aboutBook/$bookId")
                 }
             )
         }
 
-        composable("settings") {
-            Settings()
+        composable("Read") {
+            Read()
         }
 
         composable(
-            "detailedView/{movieId}"
+            "aboutBook/{bookId}"
         ) { backStackEntry ->
-            backStackEntry.arguments?.getString("movieId")?.let { DetailedView(it) }
+            backStackEntry.arguments?.getString("bookId")?.let { AboutBookView(it) }
         }
 
     }
@@ -120,7 +112,6 @@ fun BottomNavigationBar(
                 unselectedContentColor = Color.Gray,
                 icon = {
                     Column(horizontalAlignment = CenterHorizontally) {
-                        Icon(imageVector = item.icon, contentDescription = item.name)
                         Text(
                             text = item.name,
                             textAlign = TextAlign.Center,
@@ -136,7 +127,7 @@ fun BottomNavigationBar(
 //@Preview(showBackground = true)
 //@Composable
 //fun DefaultPreview() {
-//    MyNavigationSampleTheme {
+//    MAD_00012453Theme() {
 //        Navigation(
 //
 //        )

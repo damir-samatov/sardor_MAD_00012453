@@ -1,4 +1,4 @@
-package com.example.mad_00012453.addNew
+package com.example.mad_00012453.newBook
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,10 +8,13 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.mad_00012453.AddNewView
+import com.example.mad_00012453.newBook.NewBookView
 import com.example.mad_00012453.ui.theme.MAD_00012453Theme
 
-class AddNewActivity : ComponentActivity() {
+
+
+
+class NewBookAct : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +26,7 @@ class AddNewActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    AddNewView()
+                    NewBookView()
                 }
             }
         }
@@ -34,7 +37,7 @@ class AddNewActivity : ComponentActivity() {
     @Composable
     fun DefaultPreview3() {
         MAD_00012453Theme {
-            AddNewView()
+            NewBookView()
         }
     }
 }

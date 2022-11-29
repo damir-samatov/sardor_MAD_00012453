@@ -1,4 +1,4 @@
-package com.example.mad_00012453
+package com.example.mad_00012453.library
 
 import android.content.Intent
 import androidx.compose.foundation.background
@@ -20,12 +20,14 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mad_00012453.addNew.AddNewActivity
+import com.example.mad_00012453.R
+import com.example.mad_00012453.models.Book
+import com.example.mad_00012453.newBook.NewBookAct
 
 @Composable
-fun MoviesList(
-    onMovieClick: (String) -> Unit = {},
-    viewModel: ListViewModel = ListViewModel()
+fun BooksList(
+    onBookClick: (String) -> Unit = {},
+    viewModel: LibraryModel = LibraryModel()
 ) {
 
     val context = LocalContext.current
@@ -35,12 +37,12 @@ fun MoviesList(
             modifier = Modifier
                 .fillMaxHeight()
                 .background(
-                    colorResource(R.color.movie_list_bg)
+                    colorResource(R.color.library_bg)
                 )
                 .padding(0.dp, 0.dp, 0.dp, 50.dp),
         ) {
-            items(items = viewModel.getListOfMoviesFromRemoteDb(), itemContent = { item ->
-                MovieItem(movie = item, onMovieClick)
+            items(items = viewModel.getBooksList(), itemContent = { item ->
+                BookItem(book = item, onBookClick)
             })
         }
 
@@ -48,28 +50,28 @@ fun MoviesList(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(0.dp, 0.dp, 0.dp, 70.dp),
-            onClick = { context.startActivity(Intent(context, AddNewActivity::class.java)) }) {
+            onClick = { context.startActivity(Intent(context, NewBookAct::class.java)) }) {
             Text(
-                stringResource(id = R.string.list_add_new_text),
+                stringResource(id = R.string.new_book_label),
                 modifier = Modifier.padding(15.dp, 5.dp),
-            color = colorResource(id = R.color.add_new_movie_text_color))
+            color = colorResource(id = R.color.new_book_text_color))
         }
     }
 
 }
 
 @Composable
-fun MovieItem(movie: Movie, onMovieClick: (String) -> Unit) {
+fun BookItem(book: Book, onBookClick: (String) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(15.dp, 10.dp, 15.dp, 0.dp)
             .clickable {
-                onMovieClick(movie.id)
+                onBookClick(book.id)
             }
     ) {
-        Name(name = movie.name)
-        Description(description = movie.description)
+        Title(title = book.title)
+        Author(author = book.author)
         Divider(
             modifier = Modifier
                 .padding(top = 10.dp)
@@ -79,9 +81,9 @@ fun MovieItem(movie: Movie, onMovieClick: (String) -> Unit) {
 }
 
 @Composable
-private fun Name(name: String) {
+private fun Title(title: String) {
     Text(
-        text = name,
+        text = title,
         color = Color.Black,
         fontSize = 20.sp,
         fontFamily = FontFamily.Serif,
@@ -90,9 +92,9 @@ private fun Name(name: String) {
 }
 
 @Composable
-private fun Description(description: String) {
+private fun Author(author: String) {
     Text(
-        text = description,
+        text = author,
         color = Color.DarkGray,
         fontSize = 16.sp,
         fontFamily = FontFamily.SansSerif

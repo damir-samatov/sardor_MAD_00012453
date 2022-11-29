@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 
 @Composable
-fun Settings() {
+fun Read() {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
